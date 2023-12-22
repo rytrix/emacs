@@ -200,6 +200,7 @@
   (leader-keys
     "e" '(:ignore t :wk "Eglot")
     "e s" '(eglot :wk "Start eglot")
+    "e q" '(eglot-shutdown :wk "Start eglot")
     "e a" '(eglot-code-actions :wk "Code actions")
     "e r" '(eglot-rename :wk "Rename symbol")
     "e d" '(eglot-find-declaration :wk "Find declaration")
