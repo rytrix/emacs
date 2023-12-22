@@ -167,6 +167,8 @@
     "F" '(fzf-directory default-directory :wk "fuzzy find file")
     "f g" '(fzf-grep-in-dir :wk "grep search dir")
     "e b" '(eval-buffer :wk "evaluate buffer")
+    "r c" '(projectile-run-async-shell-command-in-root :wk "shell command in project root")
+    "r s" '(projectile-run-shell :wk "shell command in project root")
     "u" '(lambda () (interactive) (undo-tree-visualize)))
 
   (leader-keys
@@ -220,9 +222,7 @@
   (global-set-key (kbd "C-=") 'text-scale-increase)
   (global-set-key (kbd "C--") 'text-scale-decrease)
   (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-  )
-
+  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease))
 
 ;; gives sudo edit permissions if we need it
 (use-package sudo-edit
@@ -230,8 +230,6 @@
 
 ;; fuzzy finding
 (use-package fzf
-  :bind
-  ;; Don't forget to set keybinds!
   :config
   (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
         fzf/executable "fzf"
@@ -309,8 +307,7 @@
   :hook (evil-normalize-keymaps . git-timemachine-hook)
   :config
     (evil-define-key 'normal git-timemachine-mode-map (kbd "C-k") 'git-timemachine-show-previous-revision)
-    (evil-define-key 'normal git-timemachine-mode-map (kbd "C-j") 'git-timemachine-show-next-revision)
-)
+    (evil-define-key 'normal git-timemachine-mode-map (kbd "C-j") 'git-timemachine-show-next-revision))
 
 ;; language modes/lsps
 (use-package cmake-mode)
