@@ -191,7 +191,7 @@
     "t" '(:ignore t :wk "Toggle")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
     "t t" '(visual-line-mode :wk "Toggle truncated lines")
-    "t s" '(shell :wk "open a eshell")
+    "t s" '(ansi-term :wk "open a eshell")
     "t b" '(shell-command :wk "run a shell command"))
 
   (leader-keys
