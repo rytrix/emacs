@@ -33,6 +33,7 @@
   (setq evil-want-keybinding nil)
   (setq evil-vsplit-window-right t)
   (setq evil-split-window-below t)
+  (setq evil-undo-system 'undo-tree)
   :config
   (evil-mode 1))
 
@@ -44,6 +45,7 @@
   :init (evil-collection-init))
 
 ;; Undo tree
+;; (use-package undo-fu)
 (use-package undo-tree
   :init
   (global-undo-tree-mode 1))
