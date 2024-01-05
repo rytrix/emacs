@@ -33,6 +33,7 @@
   (setq evil-want-keybinding nil)
   (setq evil-vsplit-window-right t)
   (setq evil-split-window-below t)
+  (setq evil-want-C-u-scroll t)
   (setq evil-undo-system 'undo-tree)
   :config
   (evil-mode 1))
@@ -315,6 +316,7 @@
 (use-package cmake-mode)
 (use-package lua-mode)
 (use-package rust-mode)
+(use-package glsl-mode)
 
 ;; Sane defaults
 ;; -----------------------------------------------------------
@@ -380,7 +382,7 @@
  '(custom-safe-themes
    '("8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" "3cdd0a96236a9db4e903c01cb45c0c111eb1492313a65790adb894f9f1a33b2d" "13096a9a6e75c7330c1bc500f30a8f4407bd618431c94aeab55c9855731a95e1" "88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e" "631c52620e2953e744f2b56d102eae503017047fb43d65ce028e88ef5846ea3b" "5f128efd37c6a87cd4ad8e8b7f2afaba425425524a68133ac0efd87291d05874" default))
  '(package-selected-packages
-   '(git-timemachine magit rust-mode lua-mode cmake-mode company-box company rainbow-delimiters projectile all-the-icons-ivy-rich counsel ivy evil)))
+   '(glsl-mode git-timemachine magit rust-mode lua-mode cmake-mode company-box company rainbow-delimiters projectile all-the-icons-ivy-rich counsel ivy evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
