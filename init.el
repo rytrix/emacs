@@ -64,7 +64,7 @@
 (use-package doom-themes
   :defer t
   :init
-  (load-theme 'doom-ayu-dark t)
+  (load-theme 'doom-monokai-octagon t)
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -75,30 +75,7 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-
-;; functions needed for some keybinds
-(defun  center-forward-paragraph()
-  "Scroll down half a page while keeping the cursor centered."
-  (interactive)
-  (let ((ln (line-number-at-pos (point)))
-	(lmax (line-number-at-pos (point-max))))
-    (cond ((= ln 1) (move-to-window-line nil))
-	  ((= ln lmax) (recenter (window-end)))
-	  (t (progn
-               (move-to-window-line -1)
-               (recenter))))))
-
-(defun center-backward-paragraph ()
-  "Scroll up half a page while keeping the cursor centered."
-  (interactive)
-  (let ((ln (line-number-at-pos (point)))
-	(lmax (line-number-at-pos (point-max))))
-    (cond ((= ln 1) nil)
-	  ((= ln lmax) (move-to-window-line nil))
-	  (t (progn
-               (move-to-window-line 0)
-               (recenter))))))
+;; (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 
 ;; quick switch
 (defvar quick-switch-array (make-vector 10 nil)
@@ -149,7 +126,7 @@
 
   (define-key evil-motion-state-map (kbd "u") 'undo-tree-undo)
 
-  (define-key evil-motion-state-map (kbd "g c") 'comment-line)
+  (define-key evil-motion-state-map (kbd "g c") 'comment-or-uncomment-region)
   
   ;; set up 'SPC' as the global leader key
   (general-create-definer leader-keys
@@ -170,8 +147,6 @@
     "F" '(fzf-directory default-directory :wk "fuzzy find file")
     "f g" '(fzf-grep-in-dir :wk "grep search dir")
     "e b" '(eval-buffer :wk "evaluate buffer")
-    "r c" '(projectile-run-async-shell-command-in-root :wk "shell command in project root")
-    "r s" '(projectile-run-shell :wk "shell command in project root")
     "u" '(lambda () (interactive) (undo-tree-visualize)))
 
   (leader-keys
@@ -205,7 +180,7 @@
   (leader-keys
     "e" '(:ignore t :wk "Eglot")
     "e s" '(eglot :wk "Start eglot")
-    "e q" '(eglot-shutdown :wk "Start eglot")
+    "e q" '(eglot-shutdown :wk "Stop eglot")
     "e a" '(eglot-code-actions :wk "Code actions")
     "e r" '(eglot-rename :wk "Rename symbol")
     "e d" '(eglot-find-declaration :wk "Find declaration")
@@ -218,6 +193,7 @@
 
   (leader-keys
     "g" '(:ignore t :wk "Git")
+    "g p" '(magit-pull :wk "Git pull")
     "g s" '(magit-status :wk "Git status")
     "g c" '(magit-commit :wk "Git commit")
     "g t" '(git-timemachine :wk "Git time machine"))
@@ -246,61 +222,15 @@
         fzf/window-height 15))
 
 ;; completions 
-(use-package company
-  :defer 2
-  :diminish
-  :custom
-  (company-begin-commands '(self-insert-command))
-  (company-idle-delay .1)
-  (company-minimum-prefix-length 2)
-  (company-show-numbers t)
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t))
-
-(use-package company-box
-  :after company
-  :diminish
-  :hook (company-mode . company-box-mode))
-
-(use-package ivy
-  :bind
-  ;; ivy-resume resumes the last Ivy-based completion.
-  (("C-c C-r" . ivy-resume)
-   ("C-x B" . ivy-switch-buffer-other-window))
-  :diminish
-  :custom
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq enable-recursive-minibuffers t)
+(use-package corfu
   :config
-  (ivy-mode))
-
-(use-package all-the-icons-ivy-rich
-  :ensure t
-  :init (all-the-icons-ivy-rich-mode 1))
-
-(use-package ivy-rich
-  :after ivy
-  :ensure t
-  :init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
-  :custom
-  (ivy-virtual-abbreviate 'full
-   ivy-rich-switch-buffer-align-virtual-buffer t
-   ivy-rich-path-style 'abbrev)
-  :config
-  )
-
-(use-package counsel
-  :after ivy
-  :diminish
-  :config 
-    (counsel-mode)
-    (setq ivy-initial-inputs-alist nil)) ;; removes starting ^ regex in M-x
+  (setq corfu-auto t
+      corfu-quit-no-match 'separator) ;; or t
+  :init
+  (global-corfu-mode))
 
 ;; Projects 
-(use-package projectile
-  :config
-  (projectile-mode 1))
+(use-package project)
 
 ;; Git stuff
 (use-package magit)
@@ -327,6 +257,8 @@
       `((".*" ,temporary-file-directory t)))
 (setq backup-directory-alist '(("." . "~/.config/emacs/saves")))
 
+(setq auto-save-default nil)
+
 ;; fonts
 (set-face-attribute 'default nil
 	            :height 150
@@ -345,10 +277,8 @@
 
 ;; Don't warn for large files (shows up when launching videos)
 (setq large-file-warning-threshold nil)
-
 ;; Don't warn for following symlinked files
 (setq vc-follow-symlinks t)
-
 ;; Don't warn when advice is added for functions
 (setq ad-redefinition-action 'accept)
 
@@ -368,7 +298,7 @@
 (add-hook 'after-change-major-mode-hook
           (lambda () (fix-syntax-tree)))
 
-;; frame stuff and transparency 
+;; frame stuff and transparency
 (set-frame-parameter nil 'alpha-background 100)
 (add-to-list 'default-frame-alist '(alpha-background . 100))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
@@ -380,9 +310,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" "3cdd0a96236a9db4e903c01cb45c0c111eb1492313a65790adb894f9f1a33b2d" "13096a9a6e75c7330c1bc500f30a8f4407bd618431c94aeab55c9855731a95e1" "88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e" "631c52620e2953e744f2b56d102eae503017047fb43d65ce028e88ef5846ea3b" "5f128efd37c6a87cd4ad8e8b7f2afaba425425524a68133ac0efd87291d05874" default))
+   '("37b6695bae243145fa2dfb41440c204cd22833c25cd1993b0f258905b9e65577" "8d8207a39e18e2cc95ebddf62f841442d36fcba01a2a9451773d4ed30b632443" "a9abd706a4183711ffcca0d6da3808ec0f59be0e8336868669dc3b10381afb6f" "f5f80dd6588e59cfc3ce2f11568ff8296717a938edd448a947f9823a4e282b66" "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "6f1f6a1a3cff62cc860ad6e787151b9b8599f4471d40ed746ea2819fcd184e1a" "8b148cf8154d34917dfc794b5d0fe65f21e9155977a36a5985f89c09a9669aa0" "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" "3cdd0a96236a9db4e903c01cb45c0c111eb1492313a65790adb894f9f1a33b2d" "13096a9a6e75c7330c1bc500f30a8f4407bd618431c94aeab55c9855731a95e1" "88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e" "631c52620e2953e744f2b56d102eae503017047fb43d65ce028e88ef5846ea3b" "5f128efd37c6a87cd4ad8e8b7f2afaba425425524a68133ac0efd87291d05874" default))
+ '(delete-selection-mode nil)
  '(package-selected-packages
-   '(glsl-mode git-timemachine magit rust-mode lua-mode cmake-mode company-box company rainbow-delimiters projectile all-the-icons-ivy-rich counsel ivy evil)))
+   '(corfu glsl-mode git-timemachine magit rust-mode lua-mode cmake-mode company-box company rainbow-delimiters projectile all-the-icons-ivy-rich counsel ivy evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
