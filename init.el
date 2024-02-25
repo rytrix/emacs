@@ -125,7 +125,6 @@
   (global-set-key (kbd "C-)") (lambda () (interactive) (quick-switch-add-buffer 9)))
 
   (define-key evil-motion-state-map (kbd "u") 'undo-tree-undo)
-
   (define-key evil-motion-state-map (kbd "g c") 'comment-or-uncomment-region)
   
   ;; set up 'SPC' as the global leader key
@@ -138,13 +137,11 @@
   (leader-keys
     "." '(find-file :wk "Find file")
     "f c" '((lambda () (interactive) (find-file "~/.config/emacs/init.el")) :wk "Edit emacs config")
-    "f r" '(counsel-recentf :wk "Find recent files")
-    "g c" '(comment-line :wk "Comment lines")
     "p" '(lambda () (interactive) (execute-kbd-macro (kbd "\"+p")))
     "P" '(lambda () (interactive) (execute-kbd-macro (kbd "\"+P")))
     "y" '(lambda () (interactive) (execute-kbd-macro (kbd "\"+y")))
     "f f" '(fzf :wk "fuzzy find file")
-    "F" '(fzf-directory default-directory :wk "fuzzy find file")
+    "F" '(fzf-directory default-directory :wk "fuzzy find file default dir")
     "f g" '(fzf-grep-in-dir :wk "grep search dir")
     "e b" '(eval-buffer :wk "evaluate buffer")
     "u" '(lambda () (interactive) (undo-tree-visualize)))
@@ -174,13 +171,14 @@
 
   (leader-keys
     "d" '(:ignore t :wk "Dired")
-    "d d" '(dired :wk "Open dired")
+    "d d" '(project-dired :wk "Open dired")
     "d j" '(dired-jump :wk "Dired jump to current"))
 
   (leader-keys
     "e" '(:ignore t :wk "Eglot")
     "e s" '(eglot :wk "Start eglot")
     "e q" '(eglot-shutdown :wk "Stop eglot")
+    "e e" '(eglot-error :wk "Show eglot error")
     "e a" '(eglot-code-actions :wk "Code actions")
     "e r" '(eglot-rename :wk "Rename symbol")
     "e d" '(eglot-find-declaration :wk "Find declaration")
@@ -188,8 +186,8 @@
     "e f" '(eglot-format-buffer :wk "Format buffer"))
   
   (leader-keys
-    "s u" '(sudo-edit-find-file :wk "Sudo find file")
-    "s U" '(sudo-edit :wk "Sudo edit file"))
+    "s U" '(sudo-edit-find-file :wk "Sudo find file")
+    "s u" '(sudo-edit :wk "Sudo edit file"))
 
   (leader-keys
     "g" '(:ignore t :wk "Git")
@@ -203,7 +201,7 @@
   (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
   (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease))
 
-;; gives sudo edit permissions if we need it
+;; gives sudo edit permissions if needed
 (use-package sudo-edit
   :config)
 
@@ -303,20 +301,3 @@
 (add-to-list 'default-frame-alist '(alpha-background . 100))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("37b6695bae243145fa2dfb41440c204cd22833c25cd1993b0f258905b9e65577" "8d8207a39e18e2cc95ebddf62f841442d36fcba01a2a9451773d4ed30b632443" "a9abd706a4183711ffcca0d6da3808ec0f59be0e8336868669dc3b10381afb6f" "f5f80dd6588e59cfc3ce2f11568ff8296717a938edd448a947f9823a4e282b66" "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "6f1f6a1a3cff62cc860ad6e787151b9b8599f4471d40ed746ea2819fcd184e1a" "8b148cf8154d34917dfc794b5d0fe65f21e9155977a36a5985f89c09a9669aa0" "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" "3cdd0a96236a9db4e903c01cb45c0c111eb1492313a65790adb894f9f1a33b2d" "13096a9a6e75c7330c1bc500f30a8f4407bd618431c94aeab55c9855731a95e1" "88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e" "631c52620e2953e744f2b56d102eae503017047fb43d65ce028e88ef5846ea3b" "5f128efd37c6a87cd4ad8e8b7f2afaba425425524a68133ac0efd87291d05874" default))
- '(delete-selection-mode nil)
- '(package-selected-packages
-   '(corfu glsl-mode git-timemachine magit rust-mode lua-mode cmake-mode company-box company rainbow-delimiters projectile all-the-icons-ivy-rich counsel ivy evil)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
