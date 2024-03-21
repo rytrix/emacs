@@ -64,7 +64,7 @@
 (use-package doom-themes
   :defer t
   :init
-  (load-theme 'doom-monokai-octagon t)
+  (load-theme 'doom-tomorrow-night t)
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -140,6 +140,7 @@
     "p" '(lambda () (interactive) (execute-kbd-macro (kbd "\"+p")))
     "P" '(lambda () (interactive) (execute-kbd-macro (kbd "\"+P")))
     "y" '(lambda () (interactive) (execute-kbd-macro (kbd "\"+y")))
+    "s" '(fzf :wk "fuzzy find file")
     "f f" '(fzf :wk "fuzzy find file")
     "F" '(fzf-directory default-directory :wk "fuzzy find file default dir")
     "f g" '(fzf-grep-in-dir :wk "grep search dir")
@@ -185,10 +186,6 @@
     "e i" '(eglot-find-implementation :wk "Find implementation")
     "e f" '(eglot-format-buffer :wk "Format buffer"))
   
-  (leader-keys
-    "s U" '(sudo-edit-find-file :wk "Sudo find file")
-    "s u" '(sudo-edit :wk "Sudo edit file"))
-
   (leader-keys
     "g" '(:ignore t :wk "Git")
     "g p" '(magit-pull :wk "Git pull")
@@ -297,7 +294,8 @@
           (lambda () (fix-syntax-tree)))
 
 ;; frame stuff and transparency
-(set-frame-parameter nil 'alpha-background 100)
-(add-to-list 'default-frame-alist '(alpha-background . 100))
+;; (setq-local opacity 60)
+(set-frame-parameter nil 'alpha-background 80)
+(add-to-list 'default-frame-alist '(alpha-background . 80))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
