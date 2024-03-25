@@ -60,11 +60,11 @@
 (use-package rainbow-mode
   :hook org-mode prog-mode)
 
-;; 5. Doom packages (theming)
+;; Doom packages (theming)
 (use-package doom-themes
   :defer t
   :init
-  (load-theme 'doom-tomorrow-night t)
+  (load-theme 'doom-challenger-deep t)
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -97,32 +97,43 @@
   (aset quick-switch-array index (current-buffer))
   (message "Buffer added to index %d" index))
 
+(defvar quick-switch-mode-map (make-sparse-keymap)
+  "Keymap for quick switch")
+
+(define-key quick-switch-mode-map (kbd "C-1") (lambda () (interactive) (quick-switch-to-buffer 0)))
+(define-key quick-switch-mode-map (kbd "C-2") (lambda () (interactive) (quick-switch-to-buffer 1)))
+(define-key quick-switch-mode-map (kbd "C-3") (lambda () (interactive) (quick-switch-to-buffer 2)))
+(define-key quick-switch-mode-map (kbd "C-4") (lambda () (interactive) (quick-switch-to-buffer 3)))
+(define-key quick-switch-mode-map (kbd "C-5") (lambda () (interactive) (quick-switch-to-buffer 4)))
+(define-key quick-switch-mode-map (kbd "C-6") (lambda () (interactive) (quick-switch-to-buffer 5)))
+(define-key quick-switch-mode-map (kbd "C-7") (lambda () (interactive) (quick-switch-to-buffer 6)))
+(define-key quick-switch-mode-map (kbd "C-8") (lambda () (interactive) (quick-switch-to-buffer 7)))
+(define-key quick-switch-mode-map (kbd "C-9") (lambda () (interactive) (quick-switch-to-buffer 8)))
+(define-key quick-switch-mode-map (kbd "C-0") (lambda () (interactive) (quick-switch-to-buffer 9)))
+
+(define-key quick-switch-mode-map (kbd "C-!") (lambda () (interactive) (quick-switch-add-buffer 0)))
+(define-key quick-switch-mode-map (kbd "C-@") (lambda () (interactive) (quick-switch-add-buffer 1)))
+(define-key quick-switch-mode-map (kbd "C-#") (lambda () (interactive) (quick-switch-add-buffer 2)))
+(define-key quick-switch-mode-map (kbd "C-$") (lambda () (interactive) (quick-switch-add-buffer 3)))
+(define-key quick-switch-mode-map (kbd "C-%") (lambda () (interactive) (quick-switch-add-buffer 4)))
+(define-key quick-switch-mode-map (kbd "C-^") (lambda () (interactive) (quick-switch-add-buffer 5)))
+(define-key quick-switch-mode-map (kbd "C-&") (lambda () (interactive) (quick-switch-add-buffer 6)))
+(define-key quick-switch-mode-map (kbd "C-*") (lambda () (interactive) (quick-switch-add-buffer 7)))
+(define-key quick-switch-mode-map (kbd "C-(") (lambda () (interactive) (quick-switch-add-buffer 8)))
+(define-key quick-switch-mode-map (kbd "C-)") (lambda () (interactive) (quick-switch-add-buffer 9)))
+
+(define-minor-mode quick-switch-mode
+  "overrides keys trying to replace quick switch binds (orgmode...)"
+  :init-value t
+  :lighter "quick-switch"
+  :keymap quick-switch-mode-map)
+
+(add-hook 'text-mode-hook 'quick-switch-mode)
+
 ;; keybinds
 (use-package general
   :config
   (general-evil-setup)
-
-  (global-set-key (kbd "C-1") (lambda () (interactive) (quick-switch-to-buffer 0)))
-  (global-set-key (kbd "C-2") (lambda () (interactive) (quick-switch-to-buffer 1)))
-  (global-set-key (kbd "C-3") (lambda () (interactive) (quick-switch-to-buffer 2)))
-  (global-set-key (kbd "C-4") (lambda () (interactive) (quick-switch-to-buffer 3)))
-  (global-set-key (kbd "C-5") (lambda () (interactive) (quick-switch-to-buffer 4)))
-  (global-set-key (kbd "C-6") (lambda () (interactive) (quick-switch-to-buffer 5)))
-  (global-set-key (kbd "C-7") (lambda () (interactive) (quick-switch-to-buffer 6)))
-  (global-set-key (kbd "C-8") (lambda () (interactive) (quick-switch-to-buffer 7)))
-  (global-set-key (kbd "C-9") (lambda () (interactive) (quick-switch-to-buffer 8)))
-  (global-set-key (kbd "C-0") (lambda () (interactive) (quick-switch-to-buffer 9)))
-
-  (global-set-key (kbd "C-!") (lambda () (interactive) (quick-switch-add-buffer 0)))
-  (global-set-key (kbd "C-@") (lambda () (interactive) (quick-switch-add-buffer 1)))
-  (global-set-key (kbd "C-#") (lambda () (interactive) (quick-switch-add-buffer 2)))
-  (global-set-key (kbd "C-$") (lambda () (interactive) (quick-switch-add-buffer 3)))
-  (global-set-key (kbd "C-%") (lambda () (interactive) (quick-switch-add-buffer 4)))
-  (global-set-key (kbd "C-^") (lambda () (interactive) (quick-switch-add-buffer 5)))
-  (global-set-key (kbd "C-&") (lambda () (interactive) (quick-switch-add-buffer 6)))
-  (global-set-key (kbd "C-*") (lambda () (interactive) (quick-switch-add-buffer 7)))
-  (global-set-key (kbd "C-(") (lambda () (interactive) (quick-switch-add-buffer 8)))
-  (global-set-key (kbd "C-)") (lambda () (interactive) (quick-switch-add-buffer 9)))
 
   (define-key evil-motion-state-map (kbd "u") 'undo-tree-undo)
   (define-key evil-motion-state-map (kbd "g c") 'comment-or-uncomment-region)
@@ -294,8 +305,28 @@
           (lambda () (fix-syntax-tree)))
 
 ;; frame stuff and transparency
-;; (setq-local opacity 60)
-(set-frame-parameter nil 'alpha-background 80)
-(add-to-list 'default-frame-alist '(alpha-background . 80))
+(defun set-frame-tranparency (value)
+  "sets the trasparency of emacs"
+  (interactive)
+  (set-frame-parameter nil 'alpha-background value)
+  (add-to-list 'default-frame-alist '(cons alpha-background . value)))
+
+(set-frame-tranparency 50)
+
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("13096a9a6e75c7330c1bc500f30a8f4407bd618431c94aeab55c9855731a95e1" default))
+ '(delete-selection-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
