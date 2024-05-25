@@ -311,10 +311,7 @@
   (set-frame-parameter nil 'alpha-background value)
   (add-to-list 'default-frame-alist '(cons alpha-background . value)))
 
-(set-frame-tranparency 50)
-
-(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(set-frame-tranparency 90)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
